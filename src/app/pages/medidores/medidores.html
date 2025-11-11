@@ -1,74 +1,108 @@
-<div class="p-6 bg-gray-100 min-h-screen">
-  <div class="bg-white shadow-md rounded-xl p-6">
-    <h2 class="text-2xl font-bold mb-4 text-gray-800">Gestión de Medidores</h2>
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+  <!-- 🔹 Título -->
+  <h1 class="text-3xl sm:text-4xl font-bold text-blue-700 mb-8 text-center">Gestión de Medidores</h1>
 
-    <!-- FORMULARIO PARA CREAR MEDIDOR -->
-    <form (ngSubmit)="agregarMedidor()" #formMedidor="ngForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <!-- 🔹 Mensajes -->
+  <div *ngIf="mensaje" class="mb-4 w-full max-w-3xl p-3 bg-green-100 text-green-700 rounded-lg text-center font-medium">
+    {{ mensaje }}
+  </div>
+  <div *ngIf="error" class="mb-4 w-full max-w-3xl p-3 bg-red-100 text-red-700 rounded-lg text-center font-medium">
+    {{ error }}
+  </div>
+
+  <div *ngIf="cargando" class="text-gray-500 text-center mb-3 animate-pulse">
+    Cargando medidores...
+  </div>
+
+  <!-- 🔹 Formulario -->
+  <div class="w-full max-w-4xl bg-white p-6 sm:p-8 rounded-2xl shadow-md mb-10">
+    <form (ngSubmit)="guardarMedidor()" #formMedidor="ngForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Código del Medidor -->
       <div>
         <label class="block font-semibold text-gray-700 mb-1">Código del Medidor</label>
         <input
           type="text"
           [(ngModel)]="nuevoMedidor.codigo_medidor"
           name="codigo_medidor"
-          class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+          placeholder="Ej: MED-001"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
 
+      <!-- ID Cliente -->
       <div>
         <label class="block font-semibold text-gray-700 mb-1">ID Cliente</label>
         <input
           type="number"
           [(ngModel)]="nuevoMedidor.id_cliente"
           name="id_cliente"
-          class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+          placeholder="Ej: 12"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
 
+      <!-- Dirección de Suministro -->
       <div>
         <label class="block font-semibold text-gray-700 mb-1">Dirección de Suministro</label>
         <input
           type="text"
           [(ngModel)]="nuevoMedidor.direccion_suministro"
           name="direccion_suministro"
-          class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+          placeholder="Ej: Calle 123, Ciudad"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
 
-      <div class="col-span-full flex justify-end">
+      <!-- 🔹 Botones -->
+      <div class="col-span-full flex flex-col sm:flex-row justify-end gap-3 mt-4">
         <button
           type="submit"
-          class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+          class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 disabled:opacity-50"
           [disabled]="formMedidor.invalid"
         >
-          Agregar Medidor
+          {{ editando ? 'Guardar Cambios' : 'Agregar Medidor' }}
+        </button>
+
+        <button
+          *ngIf="editando"
+          type="button"
+          (click)="cancelarEdicion()"
+          class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg font-semibold transition duration-200"
+        >
+          Cancelar
         </button>
       </div>
     </form>
+  </div>
 
-    <!-- TABLA DE MEDIDORES -->
-    <table class="w-full border-collapse">
-      <thead class="bg-gray-200 text-gray-700">
-      <tr>
-        <th class="p-2 text-left">ID</th>
-        <th class="p-2 text-left">Código</th>
-        <th class="p-2 text-left">Cliente</th>
-        <th class="p-2 text-left">Dirección</th>
-        <th class="p-2 text-center">Estado</th>
-        <th class="p-2 text-center">Acciones</th>
-      </tr>
+  <!-- 🔹 Listado -->
+  <div class="w-full max-w-6xl bg-white rounded-xl shadow-md p-4 sm:p-6 overflow-x-auto">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center sm:text-left">Listado de Medidores</h2>
+
+    <table class="w-full min-w-[700px] border-collapse">
+      <thead class="bg-blue-600 text-white">
+        <tr class="text-sm sm:text-base">
+          <th class="py-2 text-left px-3">ID</th>
+          <th class="py-2 text-left px-3">Código</th>
+          <th class="py-2 text-left px-3">Cliente</th>
+          <th class="py-2 text-left px-3">Dirección</th>
+          <th class="py-2 text-center px-3">Estado</th>
+          <th class="py-2 text-center px-3">Acciones</th>
+        </tr>
       </thead>
+
       <tbody>
-      <tr *ngFor="let m of medidores" class="border-b hover:bg-gray-50">
-        <td class="p-2">{{ m.id_medidor }}</td>
-        <td class="p-2 font-semibold">{{ m.codigo_medidor }}</td>
-        <td class="p-2">{{ m.id_cliente }}</td>
-        <td class="p-2">{{ m.direccion_suministro }}</td>
-        <td class="p-2 text-center">
+        <tr *ngFor="let m of medidores" class="border-b hover:bg-gray-100 transition text-sm sm:text-base">
+          <td class="py-2 px-3">{{ m.id_medidor }}</td>
+          <td class="py-2 px-3 font-semibold">{{ m.codigo_medidor }}</td>
+          <td class="py-2 px-3">{{ m.id_cliente }}</td>
+          <td class="py-2 px-3">{{ m.direccion_suministro }}</td>
+          <td class="py-2 text-center">
             <span
-              class="px-2 py-1 rounded-full text-sm font-semibold"
+              class="px-3 py-1 rounded-full text-sm font-semibold"
               [ngClass]="{
                 'bg-green-100 text-green-700': m.estado,
                 'bg-red-100 text-red-700': !m.estado
@@ -76,24 +110,37 @@
             >
               {{ m.estado ? 'Activo' : 'Inactivo' }}
             </span>
-        </td>
-        <td class="p-2 flex justify-center gap-3">
-          <button
-            (click)="cambiarEstado(m.id_medidor!)"
-            class="text-yellow-600 hover:text-yellow-800"
-            title="Cambiar Estado"
-          >
-            🔄
-          </button>
-          <button
-            (click)="eliminarMedidor(m.id_medidor!)"
-            class="text-red-600 hover:text-red-800"
-            title="Eliminar"
-          >
-            🗑️
-          </button>
-        </td>
-      </tr>
+          </td>
+          <td class="py-2 flex flex-col sm:flex-row justify-center gap-2 sm:gap-3">
+            <button
+              (click)="updateMedidor(m)"
+              class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-lg text-sm"
+            >
+              ✏️ Editar
+            </button>
+
+            <button
+              (click)="cambiarEstado(m.id_medidor!)"
+              class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-lg text-sm"
+            >
+              🔄 Cambiar
+            </button>
+
+            <button
+              (click)="eliminarMedidor(m.id_medidor!)"
+              class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg text-sm"
+            >
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+
+        <!-- 🔹 Estado vacío -->
+        <tr *ngIf="medidores.length === 0">
+          <td colspan="6" class="text-center py-4 text-gray-500 italic">
+            No hay medidores registrados.
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

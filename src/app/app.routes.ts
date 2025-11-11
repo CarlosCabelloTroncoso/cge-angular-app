@@ -8,7 +8,7 @@ import { LecturasComponent} from './pages/consumos/consumos';
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'clientes', component: ClientesComponent },
-  { path: 'clientes', component: ClientesComponent },
+  { path: 'lecturas', component: LecturasComponent },
   { path: 'medidores', component: MedidoresComponent },
   { path: 'boletas', component: BoletasComponent },
   { path: 'consumos', component: LecturasComponent},

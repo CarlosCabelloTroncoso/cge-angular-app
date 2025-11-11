@@ -1,65 +1,148 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <h2 class="text-2xl font-bold mb-4">Gestión de Lecturas</h2>
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+  <!-- 🔹 Título -->
+  <h1 class="text-2xl sm:text-3xl font-bold text-blue-700 mb-8 text-center">
+    Gestión de Lecturas de Consumo
+  </h1>
 
-  <div class="bg-white p-4 rounded-xl shadow-md mb-6">
-    <h3 class="text-lg font-semibold mb-3">Agregar Lectura</h3>
-
-    <div class="grid grid-cols-2 gap-4 mb-4">
-      <div>
-        <label class="block text-sm font-semibold">ID Medidor</label>
-        <input type="number" [(ngModel)]="nuevaLectura.id_medidor" class="w-full border p-2 rounded-lg" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-semibold">Año</label>
-        <input type="number" [(ngModel)]="nuevaLectura.anio" class="w-full border p-2 rounded-lg" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-semibold">Mes</label>
-        <input type="number" [(ngModel)]="nuevaLectura.mes" min="1" max="12" class="w-full border p-2 rounded-lg" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-semibold">Lectura (kWh)</label>
-        <input type="number" [(ngModel)]="nuevaLectura.lectura_kwh" class="w-full border p-2 rounded-lg" />
-      </div>
-
-      <div class="col-span-2">
-        <label class="block text-sm font-semibold">Observación</label>
-        <input type="text" [(ngModel)]="nuevaLectura.observacion" class="w-full border p-2 rounded-lg" />
-      </div>
-    </div>
-
-    <button (click)="agregarLectura()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-      Guardar Lectura
-    </button>
+  <!-- 🔹 Mensaje de éxito -->
+  <div
+    *ngIf="mensaje"
+    class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-center font-medium w-full max-w-2xl">
+    {{ mensaje }}
   </div>
 
-  <p class="text-blue-600 font-semibold mb-4">{{ mensaje }}</p>
+  <!-- 🔹 Formulario de nueva lectura -->
+  <div class="w-full max-w-4xl bg-white p-6 rounded-2xl shadow-md mb-10">
+    <form (ngSubmit)="agregarLectura()" #formLectura="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- ID Medidor -->
+      <div>
+        <label class="block font-semibold text-gray-700">ID Medidor</label>
+        <input
+          type="number"
+          [(ngModel)]="nuevaLectura.id_medidor"
+          name="id_medidor"
+          placeholder="Ej: 5"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+          required />
+      </div>
 
-  <table class="w-full border-collapse bg-white shadow-lg rounded-xl">
-    <thead class="bg-blue-100">
-    <tr>
-      <th class="p-3 text-left">ID</th>
-      <th class="p-3 text-left">Medidor</th>
-      <th class="p-3 text-left">Año</th>
-      <th class="p-3 text-left">Mes</th>
-      <th class="p-3 text-left">Lectura (kWh)</th>
-      <th class="p-3 text-left">Observación</th>
-      <th class="p-3 text-left">Creado</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let l of lecturas" class="border-t">
-      <td class="p-3">{{ l.id_lectura }}</td>
-      <td class="p-3">{{ l.id_medidor }}</td>
-      <td class="p-3">{{ l.anio }}</td>
-      <td class="p-3">{{ l.mes }}</td>
-      <td class="p-3 font-semibold text-green-700">{{ l.lectura_kwh }}</td>
-      <td class="p-3">{{ l.observacion }}</td>
-      <td class="p-3">{{ l.created_at | date: 'short' }}</td>
-    </tr>
-    </tbody>
-  </table>
+      <!-- Año -->
+      <div>
+        <label class="block font-semibold text-gray-700">Año</label>
+        <input
+          type="number"
+          [(ngModel)]="nuevaLectura.anio"
+          name="anio"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+          required />
+      </div>
+
+      <!-- Mes -->
+      <div>
+        <label class="block font-semibold text-gray-700">Mes</label>
+        <input
+          type="number"
+          min="1"
+          max="12"
+          [(ngModel)]="nuevaLectura.mes"
+          name="mes"
+          placeholder="1 - 12"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+          required />
+      </div>
+
+      <!-- Lectura -->
+      <div>
+        <label class="block font-semibold text-gray-700">Lectura (kWh)</label>
+        <input
+          type="number"
+          [(ngModel)]="nuevaLectura.lectura_kwh"
+          name="lectura_kwh"
+          placeholder="Ej: 1500"
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+          required />
+      </div>
+
+      <!-- Observación -->
+      <div class="col-span-full">
+        <label class="block font-semibold text-gray-700">Observación</label>
+        <input
+          type="text"
+          [(ngModel)]="nuevaLectura.observacion"
+          name="observacion"
+          placeholder="Ej: Lectura realizada por técnico."
+          class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <!-- Botón -->
+      <div class="col-span-full flex justify-center md:justify-end">
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-200 w-full md:w-auto"
+          [disabled]="formLectura.invalid">
+          Guardar Lectura
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 🔹 Filtro -->
+  <div
+    class="w-full max-w-3xl bg-white p-6 rounded-2xl shadow-md mb-10 flex flex-col md:flex-row items-center gap-4">
+    <div class="flex-1 w-full">
+      <label class="block font-semibold text-gray-700 mb-1">Filtrar por ID de Medidor</label>
+      <input
+        type="number"
+        [(ngModel)]="filtroMedidor"
+        placeholder="Ej: 2"
+        class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <div class="flex gap-3 mt-2 md:mt-6 w-full md:w-auto justify-center">
+      <button
+        (click)="filtrarPorMedidor()"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition w-full md:w-auto">
+        Aplicar
+      </button>
+      <button
+        (click)="limpiarFiltro()"
+        class="bg-gray-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-500 transition w-full md:w-auto">
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔹 Tabla responsive -->
+  <div class="w-full max-w-6xl bg-white rounded-xl shadow p-6 overflow-x-auto">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center md:text-left">Listado de Lecturas</h2>
+
+    <div *ngIf="lecturas.length === 0" class="text-center py-4 text-gray-500 italic">
+      No hay lecturas registradas.
+    </div>
+
+    <table *ngIf="lecturas.length > 0" class="w-full border-collapse min-w-[600px]">
+      <thead class="bg-blue-600 text-white text-sm sm:text-base">
+        <tr>
+          <th class="py-2 px-3 text-left">ID</th>
+          <th class="py-2 px-3 text-left">Medidor</th>
+          <th class="py-2 px-3 text-left">Año</th>
+          <th class="py-2 px-3 text-left">Mes</th>
+          <th class="py-2 px-3 text-left">Lectura (kWh)</th>
+          <th class="py-2 px-3 text-left">Observación</th>
+          <th class="py-2 px-3 text-left">Creado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of lecturas" class="border-b hover:bg-gray-100 transition">
+          <td class="py-2 px-3">{{ l.id_lectura }}</td>
+          <td class="py-2 px-3 font-semibold">{{ l.id_medidor }}</td>
+          <td class="py-2 px-3">{{ l.anio }}</td>
+          <td class="py-2 px-3">{{ l.mes }}</td>
+          <td class="py-2 px-3 font-semibold text-green-700">{{ l.lectura_kwh }}</td>
+          <td class="py-2 px-3">{{ l.observacion || '-' }}</td>
+          <td class="py-2 px-3">{{ l.created_at | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

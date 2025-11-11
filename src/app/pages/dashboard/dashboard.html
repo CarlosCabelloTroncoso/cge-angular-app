@@ -1,56 +1,90 @@
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-  <div class="text-center mb-10">
-    <h1 class="text-4xl font-bold text-gray-800 mb-2">Panel de Gestión</h1>
-    <p class="text-gray-500">Administra clientes, medidores, lecturas y boletas desde aquí</p>
+<div class="flex flex-col md:flex-row h-screen bg-gray-100">
+
+  <!-- Navbar superior (solo móvil) -->
+  <header class="md:hidden bg-blue-900 text-white flex items-center justify-between px-4 py-3">
+    <div class="flex items-center space-x-2">
+      <span class="text-lg font-bold text-cyan-300">CGE</span>
+      <span class="text-lg font-semibold">Admin</span>
+    </div>
+
+    <!-- Botón para abrir/cerrar menú -->
+    <button (click)="toggleMenu()" class="focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Overlay oscuro cuando se abre el menú -->
+  <div
+    *ngIf="!menuClosed"
+    (click)="toggleMenu()"
+    class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40 md:hidden">
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl">
-    <!-- Clientes -->
-    <div
-      routerLink="/clientes"
-      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer flex flex-col items-center text-center"
-    >
-      <div class="bg-blue-100 p-4 rounded-full mb-4">
-        <i class="fa-solid fa-users text-blue-600 text-3xl"></i>
+  <!-- Sidebar lateral -->
+  <nav
+    [ngClass]="{
+      '-translate-x-full': menuClosed,
+      'translate-x-0': !menuClosed
+    }"
+    class="fixed md:static top-0 left-0 w-64 bg-blue-900 text-white flex flex-col justify-between transform md:translate-x-0 transition-transform duration-300 ease-in-out z-50 h-full shadow-xl">
+
+    <div>
+      <div class="hidden md:flex items-center justify-center h-16 border-b border-blue-800">
+        <span class="text-lg font-bold text-cyan-300">CGE</span>
+        <span class="text-lg font-semibold ml-1">Admin</span>
       </div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-1">Clientes</h2>
-      <p class="text-gray-500 text-sm">Ver y administrar clientes</p>
+
+      <ul class="mt-6 space-y-2 px-6">
+        <li><a routerLink="/clientes" (click)="closeMenu()" class="block py-2 text-sm hover:text-cyan-300">Clientes</a></li>
+        <li><a routerLink="/medidores" (click)="closeMenu()" class="block py-2 text-sm hover:text-cyan-300">Medidores</a></li>
+        <li><a routerLink="/lecturas" (click)="closeMenu()" class="block py-2 text-sm hover:text-cyan-300">Lecturas</a></li>
+        <li><a routerLink="/boletas" (click)="closeMenu()" class="block py-2 text-sm hover:text-cyan-300">Boletas</a></li>
+      </ul>
     </div>
 
-    <!-- Medidores -->
-    <div
-      routerLink="/medidores"
-      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer flex flex-col items-center text-center"
-    >
-      <div class="bg-green-100 p-4 rounded-full mb-4">
-        <i class="fa-solid fa-gauge text-green-600 text-3xl"></i>
+    <div class="px-6 py-4 border-t border-blue-800 text-xs text-gray-400">
+      © 2025 CGE Dashboard
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50 mt-14 md:mt-0">
+    <h1 class="text-2xl font-semibold text-gray-700 mb-6">Resumen general</h1>
+
+    <!-- Tarjetas resumen -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow p-4">
+        <p class="text-gray-500 text-sm">Clientes</p>
+        <p class="text-3xl font-bold text-blue-900">128</p>
       </div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-1">Medidores</h2>
-      <p class="text-gray-500 text-sm">Gestiona los medidores asociados</p>
+
+      <div class="bg-white rounded-xl shadow p-4">
+        <p class="text-gray-500 text-sm">Medidores</p>
+        <p class="text-3xl font-bold text-blue-900">245</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow p-4">
+        <p class="text-gray-500 text-sm">Lecturas pendientes</p>
+        <p class="text-3xl font-bold text-blue-900">36</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow p-4">
+        <p class="text-gray-500 text-sm">Boletas emitidas</p>
+        <p class="text-3xl font-bold text-blue-900">92</p>
+      </div>
     </div>
 
-    <!-- Lecturas -->
-    <div
-      routerLink="/consumos"
-      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer flex flex-col items-center text-center"
-    >
-      <div class="bg-yellow-100 p-4 rounded-full mb-4">
-        <i class="fa-solid fa-bolt text-yellow-500 text-3xl"></i>
+    <!-- Sección del gráfico -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Consumo mensual</h2>
+      <div class="h-64 flex items-center justify-center text-gray-400">
+        (Gráfico próximamente)
       </div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-1">Lecturas</h2>
-      <p class="text-gray-500 text-sm">Registrar y consultar lecturas</p>
     </div>
 
-    <!-- Boletas -->
-    <div
-      routerLink="/boletas"
-      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer flex flex-col items-center text-center"
-    >
-      <div class="bg-purple-100 p-4 rounded-full mb-4">
-        <i class="fa-solid fa-file-invoice-dollar text-purple-600 text-3xl"></i>
-      </div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-1">Boletas</h2>
-      <p class="text-gray-500 text-sm">Emitir y ver boletas</p>
-    </div>
-  </div>
+    <!-- Rutas hijas -->
+    <router-outlet></router-outlet>
+  </main>
 </div>

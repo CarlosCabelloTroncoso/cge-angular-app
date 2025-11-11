@@ -1,60 +1,64 @@
-<div class="min-h-screen bg-gray-50 flex flex-col items-center py-10">
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-6 sm:py-10 px-4 sm:px-8">
+
   <!-- 🔹 Título -->
-  <h1 class="text-3xl font-bold text-blue-700 mb-8">Gestión de Clientes</h1>
+  <h1 class="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 sm:mb-8 text-center">
+    Gestión de Clientes
+  </h1>
 
   <!-- 🔹 Formulario -->
-  <div class="w-full max-w-lg bg-white p-6 rounded-2xl shadow-md">
-    <form [formGroup]="formCliente" (ngSubmit)="onSubmit()" class="space-y-5">
+  <div class="w-full max-w-md sm:max-w-lg bg-white p-4 sm:p-6 rounded-2xl shadow-md">
+    <form [formGroup]="formCliente" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-5">
+
       <!-- RUT -->
       <div>
-        <label class="block font-semibold text-gray-700">RUT</label>
+        <label class="block font-semibold text-gray-700 text-sm sm:text-base">RUT</label>
         <input formControlName="rut" type="text" placeholder="12.345.678-9"
-               class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+               class="w-full border p-2 sm:p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                [ngClass]="{'border-red-500': hasError('rut','required') || hasError('rut','rutInvalido')}" />
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('rut','required')">El RUT es obligatorio.</p>
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('rut','rutInvalido')">Formato de RUT inválido.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('rut','required')">El RUT es obligatorio.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('rut','rutInvalido')">Formato de RUT inválido.</p>
       </div>
 
       <!-- Nombre -->
       <div>
-        <label class="block font-semibold text-gray-700">Nombre / Razón Social</label>
+        <label class="block font-semibold text-gray-700 text-sm sm:text-base">Nombre / Razón Social</label>
         <input formControlName="nombre_razon" type="text" placeholder="Ej: Juan Pérez o Empresa XYZ"
-               class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+               class="w-full border p-2 sm:p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                [ngClass]="{'border-red-500': hasError('nombre_razon','required')}" />
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('nombre_razon','required')">Campo obligatorio.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('nombre_razon','required')">Campo obligatorio.</p>
       </div>
 
       <!-- Email -->
       <div>
-        <label class="block font-semibold text-gray-700">Email</label>
+        <label class="block font-semibold text-gray-700 text-sm sm:text-base">Email</label>
         <input formControlName="email_contacto" type="email" placeholder="correo@ejemplo.com"
-               class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+               class="w-full border p-2 sm:p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                [ngClass]="{'border-red-500': hasError('email_contacto','email')}" />
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('email_contacto','email')">Correo inválido.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('email_contacto','email')">Correo inválido.</p>
       </div>
 
       <!-- Teléfono -->
       <div>
-        <label class="block font-semibold text-gray-700">Teléfono</label>
+        <label class="block font-semibold text-gray-700 text-sm sm:text-base">Teléfono</label>
         <input formControlName="telefono" type="text" placeholder="912345678"
-               class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+               class="w-full border p-2 sm:p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                [ngClass]="{'border-red-500': hasError('telefono','required') || hasError('telefono','pattern')}" />
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('telefono','required')">El teléfono es obligatorio.</p>
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('telefono','pattern')">Debe tener 9 dígitos.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('telefono','required')">El teléfono es obligatorio.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('telefono','pattern')">Debe tener 9 dígitos.</p>
       </div>
 
       <!-- Dirección -->
       <div>
-        <label class="block font-semibold text-gray-700">Dirección de Facturación</label>
+        <label class="block font-semibold text-gray-700 text-sm sm:text-base">Dirección de Facturación</label>
         <input formControlName="direccion_facturacion" type="text" placeholder="Calle y número"
-               class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+               class="w-full border p-2 sm:p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                [ngClass]="{'border-red-500': hasError('direccion_facturacion','required')}" />
-        <p class="text-red-500 text-sm mt-1" *ngIf="hasError('direccion_facturacion','required')">Campo obligatorio.</p>
+        <p class="text-red-500 text-xs sm:text-sm mt-1" *ngIf="hasError('direccion_facturacion','required')">Campo obligatorio.</p>
       </div>
 
       <!-- Botón -->
       <button type="submit"
-              class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-200"
+              class="w-full bg-blue-600 text-white py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base hover:bg-blue-700 transition duration-200"
               [disabled]="cargando">
         {{ cargando ? 'Guardando...' : 'Guardar Cliente' }}
       </button>
@@ -62,34 +66,38 @@
   </div>
 
   <!-- 🔹 Listado -->
-  <div class="w-full max-w-4xl mt-10 bg-white rounded-xl shadow p-6">
-    <h2 class="text-2xl font-bold mb-4 text-gray-800">Listado de Clientes</h2>
-    <table class="w-full border-collapse">
+  <div class="w-full max-w-4xl mt-8 sm:mt-10 bg-white rounded-xl shadow p-4 sm:p-6 overflow-x-auto">
+    <h2 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800 text-center sm:text-left">Listado de Clientes</h2>
+
+    <table class="w-full border-collapse text-sm sm:text-base min-w-[600px]">
       <thead class="bg-blue-600 text-white">
-      <tr>
-        <th class="py-2">RUT</th>
-        <th class="py-2">Nombre</th>
-        <th class="py-2">Teléfono</th>
-        <th class="py-2">Email</th>
-        <th class="py-2">Acciones</th>
-      </tr>
+        <tr>
+          <th class="py-2 px-2 sm:px-3">RUT</th>
+          <th class="py-2 px-2 sm:px-3">Nombre</th>
+          <th class="py-2 px-2 sm:px-3">Teléfono</th>
+          <th class="py-2 px-2 sm:px-3">Email</th>
+          <th class="py-2 px-2 sm:px-3">Acciones</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let c of clientes" class="border-b hover:bg-gray-100">
-        <td class="py-2 text-center">{{ c.rut }}</td>
-        <td class="py-2 text-center">{{ c.nombre_razon }}</td>
-        <td class="py-2 text-center">{{ c.telefono }}</td>
-        <td class="py-2 text-center">{{ c.email_contacto }}</td>
-        <td class="py-2 text-center">
-          <button (click)="eliminarCliente(c.id_cliente!)"
-                  class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg">
-            Eliminar
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="clientes.length === 0">
-        <td colspan="5" class="text-center py-4 text-gray-500">No hay clientes registrados</td>
-      </tr>
+        <tr *ngFor="let c of clientes" class="border-b hover:bg-gray-100 text-center">
+          <td class="py-2 px-2">{{ c.rut }}</td>
+          <td class="py-2 px-2">{{ c.nombre_razon }}</td>
+          <td class="py-2 px-2">{{ c.telefono }}</td>
+          <td class="py-2 px-2">{{ c.email_contacto }}</td>
+          <td class="py-2 px-2">
+            <button (click)="eliminarCliente(c.id_cliente!)"
+                    class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-lg text-xs sm:text-sm">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="clientes.length === 0">
+          <td colspan="5" class="text-center py-4 text-gray-500 text-sm sm:text-base">
+            No hay clientes registrados
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

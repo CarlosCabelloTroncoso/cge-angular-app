@@ -1,37 +1,64 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <h2 class="text-2xl font-bold mb-4">Gestión de Boletas</h2>
+<div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+  <!-- 🔹 Título -->
+  <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-blue-700 text-center">Gestión de Boletas</h2>
 
-  <div class="mb-6 flex gap-4 items-center">
-    <input type="number" [(ngModel)]="idCliente" placeholder="ID Cliente" class="border p-2 rounded-lg" />
-    <button (click)="generarBoleta()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+  <!-- 🔹 Formulario de generación -->
+  <div class="w-full max-w-2xl mb-6 flex flex-col sm:flex-row gap-4 items-center justify-center bg-white p-6 rounded-2xl shadow-md">
+    <input
+      type="number"
+      [(ngModel)]="idCliente"
+      placeholder="ID Cliente"
+      class="w-full sm:flex-1 border p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+    />
+    <button
+      (click)="generarBoleta()"
+      class="w-full sm:w-auto bg-green-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-green-700 transition duration-200"
+    >
       Generar Boleta
     </button>
   </div>
 
-  <p class="text-blue-600 font-semibold mb-4">{{ mensaje }}</p>
+  <!-- 🔹 Mensaje de estado -->
+  <p *ngIf="mensaje" class="text-blue-600 font-semibold mb-4 text-center">{{ mensaje }}</p>
 
-  <table class="w-full border-collapse bg-white shadow-lg rounded-xl">
-    <thead class="bg-blue-100">
-    <tr>
-      <th class="p-3 text-left">ID</th>
-      <th class="p-3 text-left">Cliente</th>
-      <th class="p-3 text-left">Mes</th>
-      <th class="p-3 text-left">Total</th>
-      <th class="p-3 text-left">Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let b of boletas" class="border-t">
-      <td class="p-3">{{ b.id_boleta }}</td>
-      <td class="p-3">{{ b.id_cliente }}</td>
-      <td class="p-3">{{ b.mes }}/{{ b.anio }}</td>
-      <td class="p-3 font-semibold text-green-700">$ {{ b.total_pagar | number }}</td>
-      <td class="p-3">
-        <button (click)="descargarPDF(b.id_boleta!)" class="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700">
-          Descargar PDF
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <!-- 🔹 Tabla responsive -->
+  <div class="w-full max-w-6xl bg-white rounded-xl shadow-md p-4 sm:p-6 overflow-x-auto">
+    <table class="w-full min-w-[600px] border-collapse">
+      <thead class="bg-blue-600 text-white">
+        <tr class="text-sm sm:text-base">
+          <th class="p-3 text-left">ID</th>
+          <th class="p-3 text-left">Cliente</th>
+          <th class="p-3 text-left">Mes</th>
+          <th class="p-3 text-left">Total</th>
+          <th class="p-3 text-left">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let b of boletas"
+          class="border-b hover:bg-gray-100 transition text-sm sm:text-base"
+        >
+          <td class="p-3">{{ b.id_boleta }}</td>
+          <td class="p-3">{{ b.id_cliente }}</td>
+          <td class="p-3">{{ b.mes }}/{{ b.anio }}</td>
+          <td class="p-3 font-semibold text-green-700">$ {{ b.total_pagar | number }}</td>
+          <td class="p-3">
+            <button
+              (click)="descargarPDF(b.id_boleta!)"
+              class="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition duration-200"
+            >
+              Descargar PDF
+            </button>
+          </td>
+        </tr>
+
+        <!-- Estado vacío -->
+        <tr *ngIf="boletas.length === 0">
+          <td colspan="5" class="text-center py-4 text-gray-500 italic">
+            No hay boletas registradas.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
